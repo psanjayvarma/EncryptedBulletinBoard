@@ -9,11 +9,12 @@
 <div class="login-page">
     <div class="form">
         <form class="login-form" method="post" action="/login" th:object="${loginRequest}">
-            <p><span th:text="${userRegistered}"></span></p>
+            <p class="success-text"><span th:text="${userRegistered}"></span></p>
             <input type="text" name="login" placeholder="username"/>
             <input type="password" name="password" placeholder="password"/>
             <button>login</button>
             <p class="message">Not registered? <a href="/register">Create an account</a></p>
+            <p class="error-text"><span th:text="${loginError}"></span></p>
         </form>
     </div>
 </div>

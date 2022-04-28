@@ -37,7 +37,7 @@ public class UserController {
             model.addAttribute("registrationError", "User Already Exists");
             return "register_page";
         }
-        model.addAttribute("userRegistered","New User Registered Successfully");
+        model.addAttribute("userRegistered","New User Registered Successfully. Login with using Credentials");
         return "login_page";
     }
 
@@ -50,7 +50,8 @@ public class UserController {
             return "welcome_page";
         }
         else{
-            return "error_page";
+            model.addAttribute("loginError", "Invalid Login Credentials");
+            return "login_page";
         }
     }
 
