@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Board</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="login-page">
+<div class="form">
+    <form class="login-form" method="post" action="/createboard" th:object="${board}">
+        <input type="text" name="name" placeholder="Board Name"/>
+        <button>Create</button>
+        <p class="message">Want to go Back? <a href="/welcome">Go Back</a></p>
+    </form>
+</div>
+</div>
+</body>
+</html>

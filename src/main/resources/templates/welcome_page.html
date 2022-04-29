@@ -6,6 +6,12 @@
 </head>
 <body>
 <h1>Login successful</h1>
-<span th:text="${userLogin}"></span>
+<h1> Welcome <span th:text="${user.getLogin()}"></span></h1>
+<ul th:each="board : ${user.getBoards()}">
+    <li th:text="${board}"></li>
+</ul>
+
+<a href="/createboard">Create a new Board</a>
+<a href="/signout">Sign Out</a>
 </body>
 </html>

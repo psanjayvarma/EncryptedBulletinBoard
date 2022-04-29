@@ -1,6 +1,7 @@
 package edu.uwb.project.encryptedbulletinboard.model;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -8,6 +9,7 @@ import java.util.Objects;
 public class UserModel {
 
     @Id
+    @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
 
@@ -16,6 +18,13 @@ public class UserModel {
     String password;
 
     String email;
+
+    @ManyToMany(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.PERSIST})
+    @JoinTable(name = "users_boards",
+    joinColumns = @JoinColumn(name = "user_id"),
+    inverseJoinColumns = @JoinColumn(name = "board_id")
+    )
+    List<BoardModel> boards;
 
     public Integer getId() {
         return id;
@@ -49,6 +58,14 @@ public class UserModel {
         this.email = email;
     }
 
+    public List<BoardModel> getBoards() {
+        return boards;
+    }
+
+    public void setBoards(List<BoardModel> boards) {
+        this.boards = boards;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -69,5 +86,9 @@ public class UserModel {
                 ", login='" + login + '\'' +
                 ", email='" + email + '\'' +
                 '}';
+    }
+
+    public void addBoard(BoardModel boardModel) {
+        boards.add(boardModel);
     }
 }
