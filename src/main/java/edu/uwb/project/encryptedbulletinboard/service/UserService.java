@@ -41,7 +41,9 @@ public class UserService {
     }
 
     public UserModel addNewBoard(UserModel userModel, BoardModel boardModel){
-        userModel.addBoard(boardModel);
+        List<BoardModel> currentList = userModel.getBoards();
+        currentList.add(boardModel);
+        userModel.setBoards(currentList);
         return userRepository.save(userModel);
     }
 

@@ -19,7 +19,7 @@ public class UserModel {
 
     String email;
 
-    @ManyToMany(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.PERSIST})
+    @ManyToMany(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
     @JoinTable(name = "users_boards",
     joinColumns = @JoinColumn(name = "user_id"),
     inverseJoinColumns = @JoinColumn(name = "board_id")
@@ -86,9 +86,5 @@ public class UserModel {
                 ", login='" + login + '\'' +
                 ", email='" + email + '\'' +
                 '}';
-    }
-
-    public void addBoard(BoardModel boardModel) {
-        boards.add(boardModel);
     }
 }
