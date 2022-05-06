@@ -107,8 +107,15 @@ public class MainController {
     @PostMapping("/joinboard")
     public String joinBoard(@ModelAttribute UserModel userModel, Integer Id, Model model){
         BoardModel board = boardService.getBoard(Id);
+        System.out.println("Join Request for ......" + board + " by " + authenticated);
         if(board == null){
+            System.out.println("Board ID is not valid");
             model.addAttribute("JoinError", "Board Doesn't Exist");
+            return "join_board";
+        }
+        if(userService.hasTheBoard(authenticated,Id)){
+            System.out.println("User is already in the board");
+            model.addAttribute("JoinError", "You already joined the Board");
             return "join_board";
         }
         authenticated = userService.addNewBoard(authenticated, board);

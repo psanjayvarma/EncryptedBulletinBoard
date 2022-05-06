@@ -42,11 +42,19 @@ public class UserService {
 
     public UserModel addNewBoard(UserModel userModel, BoardModel boardModel){
         List<BoardModel> currentList = userModel.getBoards();
-        if(! currentList.contains(boardModel)){
-            currentList.add(boardModel);
-        }
         userModel.setBoards(currentList);
         return userRepository.save(userModel);
     }
+
+    public boolean hasTheBoard(UserModel userModel, Integer Id){
+        List<BoardModel> boards  = userModel.getBoards();
+        for(int i =0; i < boards.size(); i++){
+            if(boards.get(i).getId() == Id){
+                return true;
+            }
+        }
+        return false;
+    }
+
 
 }
