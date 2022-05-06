@@ -56,6 +56,12 @@ public class MainController {
         return "create_board";
     }
 
+    @GetMapping("/joinboard")
+    public String getJoinBoardPage(Model model){
+        model.addAttribute("Id", 0);
+        return "join_board";
+    }
+
     @GetMapping("/signout")
     public String getSingOutPage(Model model){
         authenticated = new UserModel();
@@ -98,6 +104,16 @@ public class MainController {
     }
 
 
-
+    @PostMapping("/joinboard")
+    public String joinBoard(@ModelAttribute UserModel userModel, Integer Id, Model model){
+        BoardModel board = boardService.getBoard(Id);
+        if(board == null){
+            model.addAttribute("JoinError", "Board Doesn't Exist");
+            return "join_board";
+        }
+        authenticated = userService.addNewBoard(authenticated, board);
+        model.addAttribute("user", authenticated);
+        return "welcome_page";
+    }
 
 }

@@ -42,7 +42,9 @@ public class UserService {
 
     public UserModel addNewBoard(UserModel userModel, BoardModel boardModel){
         List<BoardModel> currentList = userModel.getBoards();
-        currentList.add(boardModel);
+        if(! currentList.contains(boardModel)){
+            currentList.add(boardModel);
+        }
         userModel.setBoards(currentList);
         return userRepository.save(userModel);
     }

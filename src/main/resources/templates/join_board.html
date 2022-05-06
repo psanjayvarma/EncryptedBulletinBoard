@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Board</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="login-page">
+<div class="form">
+    <form class="login-form" method="post" action="/joinboard" th:object="${Id}">
+        <input type="text" name="Id" placeholder="Board ID"/>
+        <button>Join</button>
+        <p class="message">Want to go Back? <a href="/welcome">Go Back</a></p>
+        <p class="error-text"><span th:text="${JoinError}"></span></p>
+    </form>
+</div>
+</div>
+</body>
+</html>

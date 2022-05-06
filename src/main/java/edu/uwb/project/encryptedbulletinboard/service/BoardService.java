@@ -17,4 +17,9 @@ public class BoardService {
         boardModel.setName(name);
         return boardRepository.save(boardModel);
     }
+
+    public BoardModel getBoard(Integer Id){
+        return boardRepository.findFirstById(Id).orElse(null);
+    }
+
 }
