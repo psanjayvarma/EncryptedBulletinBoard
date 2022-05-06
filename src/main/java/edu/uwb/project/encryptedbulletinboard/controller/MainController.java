@@ -92,8 +92,8 @@ public class MainController {
     public String createNewBoard(@ModelAttribute UserModel userModel, BoardModel boardModel, Model model){
         BoardModel newBoard = boardService.createNewBoard(boardModel.getName());
         System.out.println("New Board Creation request for ...." + newBoard +"by user "+ authenticated);
-        UserModel updatedUser = userService.addNewBoard(authenticated, newBoard);
-        model.addAttribute("user", updatedUser);
+        authenticated = userService.addNewBoard(authenticated, newBoard);
+        model.addAttribute("user", authenticated);
         return "welcome_page";
     }
 
