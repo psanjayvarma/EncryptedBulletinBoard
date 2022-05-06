@@ -6,9 +6,7 @@ import edu.uwb.project.encryptedbulletinboard.service.BoardService;
 import edu.uwb.project.encryptedbulletinboard.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class MainController {
@@ -121,6 +119,13 @@ public class MainController {
         authenticated = userService.addNewBoard(authenticated, board);
         model.addAttribute("user", authenticated);
         return "welcome_page";
+    }
+
+    @GetMapping("/board/{board_id}")
+    public String viewBoardPage(@PathVariable("board_id") Integer Id, Model model){
+        BoardModel boardModel = boardService.getBoard(Id);
+        model.addAttribute("board", boardModel);
+        return "view_board";
     }
 
 }
