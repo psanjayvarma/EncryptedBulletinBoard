@@ -5,7 +5,8 @@
     <title th:text="${board.getName()}">Board Page</title>
 </head>
 <body>
-
+<h1> User Name: </h1>
+<h1 th:text="${session.user.getLogin()}"></h1>
 <h1> Board ID : </h1>
 <h1 th:text="${board.getId()}"></h1>
 <h1> Board Name : </h1>

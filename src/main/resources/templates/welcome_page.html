@@ -6,8 +6,8 @@
 </head>
 <body>
 <h1>Login successful</h1>
-<h1> Welcome <span th:text="${user.getLogin()}"></span></h1>
-<ul th:each="board : ${user.getBoards()}">
+<h1> Welcome <span th:text="${session.user.getLogin()}"></span></h1>
+<ul th:each="board : ${session.user.getBoards()}">
     <li><a th:href="${'board/'+board.getId()}" th:text="${board.getName()}"></a></li>
 </ul>
 

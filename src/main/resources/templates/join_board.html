@@ -11,7 +11,7 @@
     <form class="login-form" method="post" action="/joinboard" th:object="${Id}">
         <input type="text" name="Id" placeholder="Board ID"/>
         <button>Join</button>
-        <p class="message">Want to go Back? <a href="/welcome">Go Back</a></p>
+        <p class="message">Want to go Back? <a href="/">Go Back</a></p>
         <p class="error-text"><span th:text="${JoinError}"></span></p>
     </form>
 </div>

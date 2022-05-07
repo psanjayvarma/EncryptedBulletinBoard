@@ -8,7 +8,7 @@
 <body>
 <div class="login-page">
     <div class="form">
-        <form class="login-form" method="post" action="/login" th:object="${loginRequest}">
+        <form class="login-form" method="post" action="/" th:object="${session.user}">
             <p class="success-text"><span th:text="${userRegistered}"></span></p>
             <input type="text" name="login" placeholder="username"/>
             <input type="password" name="password" placeholder="password"/>
