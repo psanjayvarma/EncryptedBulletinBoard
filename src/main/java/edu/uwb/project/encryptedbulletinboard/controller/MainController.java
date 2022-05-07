@@ -26,7 +26,6 @@ public class MainController {
     @GetMapping("/")
     public String getIndexPage(HttpSession session, Model model){
         if(session.getAttribute("user") == null || session.getAttribute("user").equals("")){
-            session.setAttribute("user", new UserModel());
             return "login_page";
         }
         System.out.println("Session found ...." + session.getAttribute("user"));
