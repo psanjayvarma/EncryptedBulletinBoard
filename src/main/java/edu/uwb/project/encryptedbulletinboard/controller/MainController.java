@@ -76,7 +76,10 @@ public class MainController {
 
     // GET and POST for creating a new board
     @GetMapping("/createboard")
-    public String getCreateBoardPage(Model model){
+    public String getCreateBoardPage(HttpSession session, Model model){
+        if(session.getAttribute("user") == null || session.getAttribute("user").equals("")){
+            return "redirect:/";
+        }
         model.addAttribute("board", new BoardModel());
         return "create_board";
     }
@@ -93,8 +96,12 @@ public class MainController {
 
     // GET and POST for joining a board
     @GetMapping("/joinboard")
-    public String getJoinBoardPage(Model model){
+    public String getJoinBoardPage(@RequestParam(required = false) String error, HttpSession session, Model model){
+        if(session.getAttribute("user") == null || session.getAttribute("user").equals("")){
+            return "redirect:/";
+        }
         model.addAttribute("Id", 0);
+        model.addAttribute("JoinError", error);
         return "join_board";
     }
 
@@ -121,9 +128,19 @@ public class MainController {
 
     //Load a board
     @GetMapping("/board/{board_id}")
-    public String viewBoardPage(@PathVariable("board_id") Integer Id, Model model){
+    public String viewBoardPage(@PathVariable("board_id") Integer Id, HttpSession session, Model model){
         BoardModel boardModel = boardService.getBoard(Id);
-        model.addAttribute("board", boardModel);
-        return "view_board";
+        if(session.getAttribute("user") == null || session.getAttribute("user").equals("")){
+            return "redirect:/";
+        } else {
+            UserModel user = (UserModel) session.getAttribute("user");
+            if(userService.hasTheBoard(user, Id)){
+                model.addAttribute("board", boardModel);
+                return "view_board";
+            } else {
+                    return "redirect:/joinboard?error=Join%20Board%20ID:"+Id;
+            }
+        }
+
     }
 }
