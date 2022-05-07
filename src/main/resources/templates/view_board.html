@@ -11,5 +11,15 @@
 <h1 th:text="${board.getId()}"></h1>
 <h1> Board Name : </h1>
 <h1 th:text="${board.getName()}"></h1>
+
+<ul>
+    <li th:each="message : ${messages}" th:text="${message.getText()}"></li>
+</ul>
+
+<form method="post" th:action="${'/board/'+board.getId()}" th:object="${message}">
+    <input type="text" name="text" placeholder="Post a Message"/>
+    <button>Post</button>
+    <p class="message">Want to go Back? <a href="/">Go Back</a></p>
+</form>
 </body>
 </html>

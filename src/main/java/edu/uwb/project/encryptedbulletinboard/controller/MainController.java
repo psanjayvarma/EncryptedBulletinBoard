@@ -1,25 +1,29 @@
 package edu.uwb.project.encryptedbulletinboard.controller;
 
 import edu.uwb.project.encryptedbulletinboard.model.BoardModel;
+import edu.uwb.project.encryptedbulletinboard.model.MessageModel;
 import edu.uwb.project.encryptedbulletinboard.model.UserModel;
 import edu.uwb.project.encryptedbulletinboard.service.BoardService;
+import edu.uwb.project.encryptedbulletinboard.service.MessageService;
 import edu.uwb.project.encryptedbulletinboard.service.UserService;
-import org.apache.catalina.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Controller
 public class MainController {
 
     private final UserService userService;
     private final BoardService boardService;
+    private final MessageService messageService;
 
-    public MainController(UserService userService, BoardService boardService) {
+    public MainController(UserService userService, BoardService boardService, MessageService messageService) {
         this.userService = userService;
         this.boardService = boardService;
+        this.messageService = messageService;
     }
 
     // GET and POST for login/index page
@@ -105,7 +109,7 @@ public class MainController {
     }
 
     @PostMapping("/joinboard")
-    public String joinBoard(@ModelAttribute UserModel userModel, Integer Id,HttpSession session, Model model){
+    public String joinBoard(Integer Id,HttpSession session, Model model){
         UserModel user = (UserModel) session.getAttribute("user");
         BoardModel board = boardService.getBoard(Id);
         System.out.println("Join Request for ......" + board + " by " + user);
@@ -159,16 +163,41 @@ public class MainController {
     //Load a board
     @GetMapping("/board/{board_id}")
     public String viewBoardPage(@PathVariable("board_id") Integer Id, HttpSession session, Model model){
-        BoardModel boardModel = boardService.getBoard(Id);
+        BoardModel board = boardService.getBoard(Id);
         if(session.getAttribute("user") == null || session.getAttribute("user").equals("")){
             return "redirect:/";
         } else {
             UserModel user = (UserModel) session.getAttribute("user");
             if(userService.hasTheBoard(user, Id)){
-                model.addAttribute("board", boardModel);
+                List<MessageModel> messages = messageService.getMessages(Id);
+                if(messages.isEmpty()) {
+                    MessageModel noMessage = new MessageModel();
+                    noMessage.setText("No Messages in the Board");
+                    messages.add(noMessage);
+                }
+                model.addAttribute("message", new MessageModel());
+                model.addAttribute("messages", messages);
+                model.addAttribute("board", board);
                 return "view_board";
             } else {
                     return "redirect:/joinboard?error=Join%20Board%20ID:"+Id;
+            }
+        }
+
+    }
+
+    //Post message
+    @PostMapping("/board/{board_id}")
+    public String postMessage(@PathVariable("board_id") Integer id, HttpSession session, @ModelAttribute MessageModel message){
+        if(session.getAttribute("user") == null || session.getAttribute("user").equals("")){
+            return "redirect:/";
+        } else {
+            UserModel user = (UserModel) session.getAttribute("user");
+            if(userService.hasTheBoard(user, id)){
+                messageService.postNewMessage(id, user, message.getText());
+                return "redirect:/board/"+id;
+            } else {
+                return "redirect:/joinboard?error=Join%20Board%20ID:"+id;
             }
         }
 
