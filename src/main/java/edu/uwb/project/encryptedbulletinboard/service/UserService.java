@@ -58,4 +58,14 @@ public class UserService {
     }
 
 
+    public UserModel exitBoard(UserModel userModel, BoardModel boardModel) {
+        List<BoardModel> currentList = userModel.getBoards();
+        for(int i =0; i < currentList.size(); i++){
+            if(currentList.get(i).getId() == boardModel.getId()){
+                currentList.remove(i);
+            }
+        }
+        userModel.setBoards(currentList);
+        return userRepository.save(userModel);
+    }
 }

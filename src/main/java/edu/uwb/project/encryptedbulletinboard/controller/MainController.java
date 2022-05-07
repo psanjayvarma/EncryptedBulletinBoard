@@ -91,7 +91,7 @@ public class MainController {
         System.out.println("New Board Creation request for ...." + newBoard +"by user "+ user);
         user = userService.addNewBoard(user, newBoard);
         model.addAttribute("user", user);
-        return "welcome_page";
+        return "redirect:/";
     }
 
     // GET and POST for joining a board
@@ -122,7 +122,38 @@ public class MainController {
         }
         user = userService.addNewBoard(user, board);
         model.addAttribute("user", user);
-        return "welcome_page";
+        return "redirect:/";
+    }
+
+    // GET and POST for joining a board
+    @GetMapping("/exitboard")
+    public String getExitBoardPage(@RequestParam(required = false) String error, HttpSession session, Model model){
+        if(session.getAttribute("user") == null || session.getAttribute("user").equals("")){
+            return "redirect:/";
+        }
+        model.addAttribute("Id", 0);
+        model.addAttribute("ExitError", error);
+        return "exit_board";
+    }
+
+    @PostMapping("/exitboard")
+    public String exitBoard(@ModelAttribute UserModel userModel, Integer Id,HttpSession session, Model model){
+        UserModel user = (UserModel) session.getAttribute("user");
+        BoardModel board = boardService.getBoard(Id);
+        System.out.println("Exit Request for ......" + board + " by " + user);
+        if(board == null){
+            System.out.println("Board ID is not valid");
+            model.addAttribute("ExitError", "Board Doesn't Exist");
+            return "exit_board";
+        }
+        if(! userService.hasTheBoard(user,Id)){
+            System.out.println("User is not in the board");
+            model.addAttribute("ExitError", "You don't belong the Board");
+            return "exit_board";
+        }
+        user = userService.exitBoard(user, board);
+        model.addAttribute("user", user);
+        return "redirect:/";
     }
 
 

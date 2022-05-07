@@ -2,17 +2,17 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Join Board</title>
+    <title>Exit Board</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 <div class="login-page">
 <div class="form">
-    <form class="login-form" method="post" action="/joinboard" th:object="${Id}">
+    <form class="login-form" method="post" action="/exitboard" th:object="${Id}">
         <input type="text" name="Id" placeholder="Board ID"/>
-        <button>Join</button>
+        <button>Exit</button>
         <p class="message">Want to go Back? <a href="/">Go Back</a></p>
-        <p class="error-text"><span th:text="${JoinError}"></span></p>
+        <p class="error-text"><span th:text="${ExitError}"></span></p>
     </form>
 </div>
 </div>
