@@ -3,17 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <title>Welcome Page</title>
+    <link rel="stylesheet" href="css/nav.css">
 </head>
 <body>
-<h1>Login successful</h1>
+<div id="container">
+    <nav>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="#">Actions</a>
+                <!-- First Tier Drop Down -->
+                <ul>
+                    <li><a href="/createboard">Create a new Board</a></li>
+                    <li><a href="/joinboard">Join a Board</a></li>
+                    <li><a href="/exitboard">Exit from Board</a></li>
+                </ul>
+            </li>
+            <li><a href="/signout">Sign Out</a></li>
+        </ul>
+    </nav>
+</div>
 <h1> Welcome <span th:text="${session.user.getLogin()}"></span></h1>
-<ul th:each="board : ${session.user.getBoards()}">
-    <li><a th:href="${'board/'+board.getId()}" th:text="${board.getName()}"></a></li>
-</ul>
+<div class="board-list">
+    <ul>
+        <li th:each="board : ${session.user.getBoards()}">
+            <a th:href="${'board/'+board.getId()}" th:text="${board.getName()+'(ID: '+board.getId()+')'}"></a>
+        </li>
+    </ul>
+</div>
 
-<a href="/createboard">Create a new Board</a>
-<a href="/joinboard">Join a Board</a>
-<a href="/exitboard">Exit from Board</a>
-<a href="/signout">Sign Out</a>
+
 </body>
 </html>
