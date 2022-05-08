@@ -9,4 +9,6 @@ public interface BoardRepository extends JpaRepository<BoardModel, Integer> {
 
     Optional<BoardModel> findFirstById(Integer Id);
 
+    Optional<BoardModel> findFirstByName(String name);
+
 }

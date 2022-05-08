@@ -53,7 +53,7 @@ class UserServiceTest{
         boardModel.setName("testBoard");
         boardModels.add(boardModel);*/
 
-        userModel.setBoards(boardModels);
+        //userModel.setBoards(boardModels);
         userRepository.save(userModel);
         userModel = userRepository.findFirstByLogin("123").orElse(null);
 
