@@ -20,12 +20,18 @@ public class MessageService {
         return messageRepository.findAllByBoardId(boardId).orElse(null);
     }
 
-    public MessageModel postNewMessage(Integer boardId, UserModel user, String text){
+    public MessageModel postNewMessage(Integer boardId, UserModel user, String text, String key){
         MessageModel message = new MessageModel();
+
         message.setBoardId(boardId);
         message.setLogin(user.getLogin());
         message.setText(text);
+        message.setKey(key);
         return messageRepository.save(message);
+    }
+
+    public List<MessageModel> getMessageKeys(String login){
+        return messageRepository.findAllByLogin(login).orElse(null);
     }
 
 

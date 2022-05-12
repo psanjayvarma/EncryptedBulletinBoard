@@ -4,13 +4,20 @@ import edu.uwb.project.encryptedbulletinboard.model.BoardModel;
 import edu.uwb.project.encryptedbulletinboard.model.MessageModel;
 import edu.uwb.project.encryptedbulletinboard.model.UserModel;
 import edu.uwb.project.encryptedbulletinboard.service.BoardService;
+import edu.uwb.project.encryptedbulletinboard.service.EncryptionService;
 import edu.uwb.project.encryptedbulletinboard.service.MessageService;
 import edu.uwb.project.encryptedbulletinboard.service.UserService;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.crypto.SecretKey;
 import javax.servlet.http.HttpSession;
+import javax.xml.bind.DatatypeConverter;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -19,11 +26,13 @@ public class MainController {
     private final UserService userService;
     private final BoardService boardService;
     private final MessageService messageService;
+    private final EncryptionService encryptionService;
 
-    public MainController(UserService userService, BoardService boardService, MessageService messageService) {
+    public MainController(UserService userService, BoardService boardService, MessageService messageService, EncryptionService encryptionService) {
         this.userService = userService;
         this.boardService = boardService;
         this.messageService = messageService;
+        this.encryptionService = encryptionService;
     }
 
     // GET and POST for login/index page
@@ -178,6 +187,8 @@ public class MainController {
                 model.addAttribute("message", new MessageModel());
                 model.addAttribute("messages", messages);
                 model.addAttribute("board", board);
+                model.addAttribute("key", new String());
+                model.addAttribute("osgmsg", null);
                 return "view_board";
             } else {
                     return "redirect:/joinboard?error=Join%20Board%20ID:"+Id;
@@ -194,12 +205,71 @@ public class MainController {
         } else {
             UserModel user = (UserModel) session.getAttribute("user");
             if(userService.hasTheBoard(user, id)){
-                messageService.postNewMessage(id, user, message.getText());
+                String key = encryptionService.generateKey();
+                String encryptMessage = encryptionService.encrypt(message.getText(), encryptionService.stringToKey(key));
+                messageService.postNewMessage(id, user, encryptMessage, key);
                 return "redirect:/board/"+id;
             } else {
                 return "redirect:/joinboard?error=Join%20Board%20ID:"+id;
             }
         }
 
+    }
+
+    @GetMapping("/decrypt/{boardId}/{messageId}")
+    public String getDecryptMessage(@PathVariable("boardId") Integer boardId){
+        return "redirect:/board/"+boardId;
+    }
+
+
+    @PostMapping("/decrypt/{boardId}/{messageId}")
+    public String decryptMessage(@PathVariable("boardId") Integer boardId, @PathVariable("messageId") Integer messageId, HttpSession session, Model model, String key){
+        BoardModel board = boardService.getBoard(boardId);
+        List<MessageModel> messages = messageService.getMessages(boardId);
+       String originalMessage = "Invalid Key / Text";
+        for (MessageModel message : messages){
+            if(message.getId() == messageId){
+                originalMessage = encryptionService.decrypt(message.getText(), encryptionService.stringToKey(key));
+            }
+        }
+
+
+        model.addAttribute("message", new MessageModel());
+        model.addAttribute("messages", messages);
+        model.addAttribute("board", board);
+        model.addAttribute("key", new String());
+        model.addAttribute("osgmsg", originalMessage);
+        return "view_board";
+    }
+
+    @GetMapping("/testmain")
+    public String testmain(){
+        String key = encryptionService.generateKey();
+        System.out.println(" Key is " + key);
+
+        String originalMessage = "Hello World";
+        String encryptedMessage = encryptionService.encrypt(originalMessage, encryptionService.stringToKey(key));
+
+
+        System.out.println("Original Message is " + originalMessage);
+        System.out.println("Encrypted Message is " + encryptedMessage);
+
+
+
+        String decryptedMessage = encryptionService.decrypt(encryptedMessage, encryptionService.stringToKey(key));
+        System.out.println("Decrypted Message is " + decryptedMessage);
+        return "login_page";
+    }
+
+
+    @GetMapping("/message/keys")
+    public String getMessageKeys(HttpSession session, Model model){
+        if(session.getAttribute("user") == null || session.getAttribute("user").equals("")){
+            return "redirect:/";
+        } else {
+            UserModel user = (UserModel) session.getAttribute("user");
+            model.addAttribute("messages", messageService.getMessageKeys(user.getLogin()));
+            return "message_keys";
+        }
     }
 }

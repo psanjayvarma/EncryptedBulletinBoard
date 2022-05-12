@@ -10,4 +10,6 @@ public interface MessageRepository extends JpaRepository<MessageModel, Integer> 
 
     Optional<List<MessageModel>> findAllByBoardId(Integer boardId);
 
+    Optional<List<MessageModel>> findAllByLogin(String login);
+
 }

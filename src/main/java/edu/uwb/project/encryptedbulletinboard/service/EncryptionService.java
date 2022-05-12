@@ -12,7 +12,7 @@ import java.util.Base64;
 @Service
 public class EncryptionService {
 
-    public static String generateKey() {
+    public String generateKey() {
         SecureRandom secureRandom = new SecureRandom();
 
         try{
@@ -25,14 +25,14 @@ public class EncryptionService {
         }
     }
 
-    public static String keyToString(SecretKey key){
+    public String keyToString(SecretKey key){
         return Base64.getEncoder().encodeToString(key.getEncoded());
     }
-    public static SecretKey stringToKey(String key){
+    public SecretKey stringToKey(String key){
         return new SecretKeySpec(Base64.getDecoder().decode(key), "AES");
     }
 
-    public static String encrypt(String message, SecretKey key){
+    public String encrypt(String message, SecretKey key){
 
         try {
             Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
@@ -44,24 +44,15 @@ public class EncryptionService {
         }
     }
 
-    public static String decrypt(String message, SecretKey key){
+    public String decrypt(String message, SecretKey key){
         try {
             Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
             cipher.init(Cipher.DECRYPT_MODE, key);
             byte[] decryptedMessage = cipher.doFinal(Base64.getDecoder().decode(message));
             return new String(decryptedMessage);
-        } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
-        } catch (IllegalBlockSizeException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (BadPaddingException e) {
-            e.printStackTrace();
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            return "Invalid Key";
         }
-        return null;
     }
 
 }
