@@ -173,11 +173,6 @@ public class MainController {
             UserModel user = (UserModel) session.getAttribute("user");
             if(userService.hasTheBoard(user, Id)){
                 List<MessageModel> messages = messageService.getMessages(Id);
-                if(messages.isEmpty()) {
-                    MessageModel noMessage = new MessageModel();
-                    noMessage.setText("No Messages in the Board");
-                    messages.add(noMessage);
-                }
                 model.addAttribute("message", new MessageModel());
                 model.addAttribute("messages", messages);
                 model.addAttribute("board", board);
