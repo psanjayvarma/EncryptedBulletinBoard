@@ -11,4 +11,5 @@ public interface BoardRepository extends JpaRepository<BoardModel, Integer> {
 
     Optional<BoardModel> findFirstByName(String name);
 
+
 }

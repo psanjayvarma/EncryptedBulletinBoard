@@ -1,8 +1,12 @@
 package edu.uwb.project.encryptedbulletinboard.service;
 
 import edu.uwb.project.encryptedbulletinboard.model.BoardModel;
+import edu.uwb.project.encryptedbulletinboard.model.UserModel;
 import edu.uwb.project.encryptedbulletinboard.repository.BoardRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class BoardService {
@@ -20,6 +24,11 @@ public class BoardService {
 
     public BoardModel getBoard(Integer Id){
         return boardRepository.findFirstById(Id).orElse(null);
+    }
+
+    public List<UserModel> getUsers(Integer id){
+        return getBoard(id).getUsers();
+
     }
 
 }
