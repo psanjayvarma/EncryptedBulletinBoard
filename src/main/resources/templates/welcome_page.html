@@ -50,6 +50,7 @@
             </div>
         </div>
     </div>
+    <div th:if="${session.user.getBoards().isEmpty()}" class="alert alert-primary" role="alert"> You are currently not part of any Boards. Try Creating or joining a Board</div>
 </div>
 
 <!-- Optional JavaScript; choose one of the two! -->
