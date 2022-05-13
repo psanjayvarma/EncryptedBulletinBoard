@@ -4,14 +4,9 @@ import edu.uwb.project.encryptedbulletinboard.model.BoardModel;
 import edu.uwb.project.encryptedbulletinboard.model.UserModel;
 import edu.uwb.project.encryptedbulletinboard.repository.UserRepository;
 import org.junit.jupiter.api.Test;
-import org.mockito.internal.matchers.Null;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,9 +40,9 @@ class UserServiceTest{
     @Test
     void registerUser() {
 
-        userModel.setLogin("123");
+        userModel.setUsername("123");
         userModel.setPassword("admin");
-        userModel.setEmail("tester@testmail.com");
+        userModel.setName("tester@testmail.com");
 
         /*BoardModel boardModel = new BoardModel();
         boardModel.setName("testBoard");
@@ -55,17 +50,17 @@ class UserServiceTest{
 
         //userModel.setBoards(boardModels);
         userRepository.save(userModel);
-        userModel = userRepository.findFirstByLogin("123").orElse(null);
+        userModel = userRepository.findFirstByUsername("123").orElse(null);
 
-        assertEquals("123", userModel.getLogin());
+        assertEquals("123", userModel.getUsername());
         assertEquals("admin", userModel.getPassword());
-        assertEquals("tester@testmail.com", userModel.getEmail());
+        assertEquals("tester@testmail.com", userModel.getName());
 
     }
 
     @Test
     void authenticate() {
-        userModel = userRepository.findByLoginAndPassword("123", "admin").orElse(null);
+        userModel = userRepository.findByUsernameAndPassword("123", "admin").orElse(null);
         if(userModel == null)
         {
             fail("NO USER");
@@ -78,7 +73,7 @@ class UserServiceTest{
 
     @Test
     void addNewBoard() {
-        userModel = userRepository.findByLoginAndPassword("123", "admin").orElse(null);
+        userModel = userRepository.findByUsernameAndPassword("123", "admin").orElse(null);
         BoardModel boardModel = new BoardModel();
         boardModel.setName("testBoard");
         boardModels.add(boardModel);
@@ -90,7 +85,7 @@ class UserServiceTest{
 
     @Test
     void hasTheBoard() {
-        userModel = userRepository.findByLoginAndPassword("123", "admin").orElse(null);
+        userModel = userRepository.findByUsernameAndPassword("123", "admin").orElse(null);
         boards = userModel.getBoards();
         //System.out.println("Board ID is" + boards.get(0).getId());
         assertEquals("testBoard", boards.get(0).getName());
@@ -98,7 +93,7 @@ class UserServiceTest{
 
     @Test
     void exitBoard() {
-        userModel = userRepository.findByLoginAndPassword("123", "admin").orElse(null);
+        userModel = userRepository.findByUsernameAndPassword("123", "admin").orElse(null);
         boards = userModel.getBoards();
         //System.out.println("Size     " + boards.size());
         for(int i = 0; i < boards.size(); i++)

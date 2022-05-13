@@ -53,8 +53,8 @@
             </thead>
             <tbody>
             <tr th:each="user : ${users}">
-                <td th:text="${user.getEmail()}"></td>
-                <td th:text="${user.getLogin()}"></td>
+                <td th:text="${user.getName()}"></td>
+                <td th:text="${user.getUsername()}"></td>
             </tr>
             </tbody>
         </table>

@@ -1,9 +1,7 @@
 package edu.uwb.project.encryptedbulletinboard.service;
 
 import edu.uwb.project.encryptedbulletinboard.model.MessageModel;
-import edu.uwb.project.encryptedbulletinboard.model.UserModel;
 import edu.uwb.project.encryptedbulletinboard.repository.MessageRepository;
-import edu.uwb.project.encryptedbulletinboard.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -35,7 +33,7 @@ class MessageServiceTest {
     void postNewMessage() {
         MessageModel message = new MessageModel();
         message.setBoardId(3);
-        message.setLogin("123");
+        message.setUsername("123");
         message.setText("This is a test message");
         messageRepository.save(message);
     }

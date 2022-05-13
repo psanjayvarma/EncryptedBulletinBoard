@@ -17,27 +17,27 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public UserModel registerUser(String login, String password, String email){
+    public UserModel registerUser(String username, String password, String name){
         
-        if(login == null && password == null){
+        if(username == null && password == null){
             return null;
         } else {
-            if(userRepository.findFirstByLogin(login).isPresent()){
+            if(userRepository.findFirstByUsername(username).isPresent()){
                 System.out.println("User already present");
                 return null;
             }
             List<BoardModel> boardModels = new ArrayList<>();
             UserModel userModel = new UserModel();
-            userModel.setLogin(login);
+            userModel.setUsername(username);
             userModel.setPassword(password);
-            userModel.setEmail(email);
+            userModel.setName(name);
             userModel.setBoards(boardModels);
             return userRepository.save(userModel);
         }
     }
 
-    public UserModel authenticate(String login, String password){
-        return userRepository.findByLoginAndPassword(login, password).orElse(null);
+    public UserModel authenticate(String username, String password){
+        return userRepository.findByUsernameAndPassword(username, password).orElse(null);
     }
 
     public UserModel addNewBoard(UserModel userModel, BoardModel boardModel){

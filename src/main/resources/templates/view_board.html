@@ -59,7 +59,7 @@
         <div class="accordion" id="accordionExample">
             <div class="accordion-item" th:each="message : ${messages}">
                 <h2 class="accordion-header" th:id="${'heading'+message.getId()}">
-                    <button class="accordion-button collapsed" style="overflow-wrap: anywhere;" type="button" data-bs-toggle="collapse" th:data-bs-target="${'#collapse'+message.getId()}" aria-expanded="true" aria-controls="collapseOne" th:text="${message.getLogin() + ' : ' + message.getText()}">
+                    <button class="accordion-button collapsed" style="overflow-wrap: anywhere;" type="button" data-bs-toggle="collapse" th:data-bs-target="${'#collapse'+message.getId()}" aria-expanded="true" aria-controls="collapseOne" th:text="${message.getUsername() + ' : ' + message.getText()}">
                     </button>
                 </h2>
                 <div th:id="${'collapse'+message.getId()}" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">

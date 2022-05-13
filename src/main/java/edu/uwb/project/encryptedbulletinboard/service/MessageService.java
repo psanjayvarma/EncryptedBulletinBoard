@@ -5,7 +5,6 @@ import edu.uwb.project.encryptedbulletinboard.model.UserModel;
 import edu.uwb.project.encryptedbulletinboard.repository.MessageRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -24,14 +23,14 @@ public class MessageService {
         MessageModel message = new MessageModel();
 
         message.setBoardId(boardId);
-        message.setLogin(user.getLogin());
+        message.setUsername(user.getUsername());
         message.setText(text);
         message.setKey(key);
         return messageRepository.save(message);
     }
 
-    public List<MessageModel> getMessageKeys(String login){
-        return messageRepository.findAllByLogin(login).orElse(null);
+    public List<MessageModel> getMessageKeys(String username){
+        return messageRepository.findAllByUsername(username).orElse(null);
     }
 
 

@@ -13,11 +13,11 @@ public class UserModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Integer id;
 
-    String login;
+    String username;
 
     String password;
 
-    String email;
+    String name;
 
     @ManyToMany(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
     @JoinTable(name = "users_boards",
@@ -34,12 +34,12 @@ public class UserModel {
         this.id = id;
     }
 
-    public String getLogin() {
-        return login;
+    public String getUsername() {
+        return username;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -50,12 +50,12 @@ public class UserModel {
         this.password = password;
     }
 
-    public String getEmail() {
-        return email;
+    public String getName() {
+        return name;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public List<BoardModel> getBoards() {
@@ -71,20 +71,20 @@ public class UserModel {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserModel userModel = (UserModel) o;
-        return Objects.equals(id, userModel.id) && Objects.equals(login, userModel.login) && Objects.equals(password, userModel.password) && Objects.equals(email, userModel.email);
+        return Objects.equals(id, userModel.id) && Objects.equals(username, userModel.username) && Objects.equals(password, userModel.password) && Objects.equals(name, userModel.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, login, password, email);
+        return Objects.hash(id, username, password, name);
     }
 
     @Override
     public String toString() {
         return "UserModel{" +
                 "id=" + id +
-                ", login='" + login + '\'' +
-                ", email='" + email + '\'' +
+                ", login='" + username + '\'' +
+                ", email='" + name + '\'' +
                 '}';
     }
 }

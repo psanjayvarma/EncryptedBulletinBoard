@@ -16,7 +16,7 @@ public class MessageModel {
 
     Integer boardId;
 
-    String login;
+    String username;
 
     String key;
 
@@ -44,12 +44,12 @@ public class MessageModel {
         this.boardId = boardId;
     }
 
-    public String getLogin() {
-        return login;
+    public String getUsername() {
+        return username;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getKey() {
@@ -65,12 +65,12 @@ public class MessageModel {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         MessageModel that = (MessageModel) o;
-        return Objects.equals(id, that.id) && Objects.equals(text, that.text) && Objects.equals(boardId, that.boardId) && Objects.equals(login, that.login) && Objects.equals(key, that.key);
+        return Objects.equals(id, that.id) && Objects.equals(text, that.text) && Objects.equals(boardId, that.boardId) && Objects.equals(username, that.username) && Objects.equals(key, that.key);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, text, boardId, login, key);
+        return Objects.hash(id, text, boardId, username, key);
     }
 
     @Override
@@ -79,7 +79,7 @@ public class MessageModel {
                 "id=" + id +
                 ", text='" + text + '\'' +
                 ", boardId=" + boardId +
-                ", login='" + login + '\'' +
+                ", login='" + username + '\'' +
                 ", key='" + key + '\'' +
                 '}';
     }

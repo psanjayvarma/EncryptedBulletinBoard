@@ -7,17 +7,11 @@ import edu.uwb.project.encryptedbulletinboard.service.BoardService;
 import edu.uwb.project.encryptedbulletinboard.service.EncryptionService;
 import edu.uwb.project.encryptedbulletinboard.service.MessageService;
 import edu.uwb.project.encryptedbulletinboard.service.UserService;
-import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.crypto.SecretKey;
 import javax.servlet.http.HttpSession;
-import javax.xml.bind.DatatypeConverter;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -49,7 +43,7 @@ public class MainController {
     @PostMapping("/")
     public String login(@ModelAttribute UserModel userModel, HttpSession session, Model model){
         session.setAttribute("user", userModel);
-        UserModel user = userService.authenticate(userModel.getLogin(), userModel.getPassword());
+        UserModel user = userService.authenticate(userModel.getUsername(), userModel.getPassword());
         if(user != null){
             session.setAttribute("user", user);
             return "welcome_page";
@@ -69,7 +63,7 @@ public class MainController {
 
     @PostMapping("/register")
     public String register(@ModelAttribute UserModel userModel, Model model){
-        UserModel registeredUser = userService.registerUser(userModel.getLogin(), userModel.getPassword(), userModel.getEmail());
+        UserModel registeredUser = userService.registerUser(userModel.getUsername(), userModel.getPassword(), userModel.getName());
         System.out.println("Register request for ...." + registeredUser);
         if(registeredUser == null){
             model.addAttribute("registrationError", "User Already Exists");
@@ -249,7 +243,7 @@ public class MainController {
             return "redirect:/";
         } else {
             UserModel user = (UserModel) session.getAttribute("user");
-            model.addAttribute("messages", messageService.getMessageKeys(user.getLogin()));
+            model.addAttribute("messages", messageService.getMessageKeys(user.getUsername()));
             return "message_keys";
         }
     }
