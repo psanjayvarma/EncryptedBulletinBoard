@@ -382,6 +382,41 @@ public class MainController {
                 return "redirect:/joinboard?error=Join%20Board%20ID:"+Id;
             }
         }
+    }
 
+    @GetMapping("/changepassword")
+    public String getChangePasswordPage(@RequestParam(required = false) String error, HttpSession session, Model model){
+
+        //check if session has user details
+        if(session.getAttribute("user") == null || session.getAttribute("user").equals("")){
+            //load index/login page
+            return "redirect:/";
+        }
+
+        //add id and error message to model
+        model.addAttribute("Id", 0);
+        model.addAttribute("ExitError", error);
+
+        //load exit board template
+        return "change_password";
+    }
+
+    @PostMapping("/changepassword")
+    public String changePassword(@ModelAttribute UserModel userModel, String password,HttpSession session, Model model){
+
+        //get user details from session
+        UserModel user = (UserModel) session.getAttribute("user");
+
+        //This is only a failsafe.
+        if(user == null){
+            //add error message and load the template
+            model.addAttribute("ExitError", "Try logging in again");
+            return "change_password";
+        }
+
+        userService.changePassword(user, password);
+
+        //load index/login page
+        return "redirect:/";
     }
 }

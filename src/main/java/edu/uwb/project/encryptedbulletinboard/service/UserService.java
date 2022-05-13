@@ -105,4 +105,15 @@ public class UserService {
         //update the database
         return userRepository.save(userModel);
     }
+
+    public UserModel changePassword(UserModel userModel, String newPassword)
+    {
+        UserModel user = userRepository.findByUsernameAndPassword(userModel.getUsername(), userModel.getPassword()).orElse(null);
+        if(user == null && newPassword == null){
+            return null;
+        }
+
+        user.setPassword(newPassword);
+        return userRepository.save(user);
+    }
 }
