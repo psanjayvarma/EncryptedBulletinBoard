@@ -44,8 +44,14 @@
 </nav>
 <div class="container">
     <hr class="my-4">
-    <h1 th:text="${board.getName()+'(ID: '+board.getId()+')'}"></h1>
-    <a th:href="${board.getId()+'/users'}">User List</a>
+    <div class="row">
+        <div class="col">
+            <h1 th:text="${board.getName()+'(ID: '+board.getId()+')'}"></h1>
+        </div>
+        <div class="col d-flex justify-content-end align-self-center">
+            <a th:href="${board.getId()+'/users'}" class="text-end">Users List</a>
+        </div>
+    </div>
     <hr class="my-4">
     <div th:if="${osgmsg != null}" class="alert alert-primary" role="alert" th:text="${osgmsg}"></div>
     <div th:if="${newkey != null}" class="alert alert-primary" role="alert" th:text="${'The new key is '+newkey}"></div>
