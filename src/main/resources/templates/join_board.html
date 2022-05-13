@@ -64,7 +64,7 @@
             <form class="row" style="padding:10px"  method="post" action="/joinboard" th:object="${Id}">
                 <div class="col-8">
                     <label for="boardid" class="visually-hidden">Board ID</label>
-                    <input type="text" id ="boardid" name="Id" class="form-control" placeholder="Enter Board ID" aria-label="Enter Board ID" aria-describedby="button-addon2">
+                    <input type="text" id ="boardid" name="Id" class="form-control" placeholder="Enter Board ID" aria-label="Enter Board ID" aria-describedby="button-addon2" required>
                 </div>
                 <div class="col-4">
                     <button class="btn btn-outline-secondary" id="button-addon2">Join</button>

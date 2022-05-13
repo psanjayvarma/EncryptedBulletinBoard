@@ -64,7 +64,7 @@
             <form class="row" style="padding:10px" method="post" action="/createboard" th:object="${board}">
                 <div class="col-8">
                     <label for="boardname" class="visually-hidden">Board Name</label>
-                    <input type="text" id ="boardname" name="name" class="form-control" placeholder="Enter Board Name" aria-label="Enter Board Name" aria-describedby="button-addon2">
+                    <input type="text" id ="boardname" name="name" class="form-control" placeholder="Enter Board Name" aria-label="Enter Board Name" aria-describedby="button-addon2" required>
                 </div>
                 <div class="col-4">
                     <button class="btn btn-outline-secondary" id="button-addon2">Create</button>
