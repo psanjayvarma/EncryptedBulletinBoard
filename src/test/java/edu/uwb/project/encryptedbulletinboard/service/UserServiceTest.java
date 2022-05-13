@@ -31,8 +31,6 @@ class UserServiceTest{
     private UserRepository userRepository;
 
 
-    //private UserService userService = new UserService(userRepository);
-
     List<BoardModel> boardModels = new ArrayList<>();
     List<BoardModel> boards = new ArrayList<>();
     UserModel userModel = new UserModel();
@@ -44,11 +42,6 @@ class UserServiceTest{
         userModel.setPassword("admin");
         userModel.setName("tester@testmail.com");
 
-        /*BoardModel boardModel = new BoardModel();
-        boardModel.setName("testBoard");
-        boardModels.add(boardModel);*/
-
-        //userModel.setBoards(boardModels);
         userRepository.save(userModel);
         userModel = userRepository.findFirstByUsername("123").orElse(null);
 
