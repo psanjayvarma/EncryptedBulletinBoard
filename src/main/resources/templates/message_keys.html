@@ -44,7 +44,7 @@
 </nav>
 <div class="container">
     <div class="table-responsive">
-        <table th:if="messages != null" class="table">
+        <table th:if="messages != null" class="table" style="">
             <thead>
             <tr>
                 <th scope="col">Board ID</th>
@@ -61,7 +61,7 @@
             </tbody>
         </table>
     </div>
-    <div th:if="${messages == null}" class="alert alert-danger" role="alert"> No messages were posted yet.</div>
+    <div th:if="${messages.isEmpty()}" class="alert alert-danger" role="alert"> No messages were posted yet.</div>
 </div>
 
 <!-- Optional JavaScript; choose one of the two! -->

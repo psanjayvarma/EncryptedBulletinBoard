@@ -171,7 +171,7 @@ public class MainController {
 
     //Load a board
     @GetMapping("/board/{board_id}")
-    public String viewBoardPage(@PathVariable("board_id") Integer Id, HttpSession session, Model model){
+    public String viewBoardPage(@PathVariable("board_id") Integer Id, @RequestParam(required = false) String key, HttpSession session, Model model){
         BoardModel board = boardService.getBoard(Id);
         if(session.getAttribute("user") == null || session.getAttribute("user").equals("")){
             return "redirect:/";
@@ -188,6 +188,7 @@ public class MainController {
                 model.addAttribute("messages", messages);
                 model.addAttribute("board", board);
                 model.addAttribute("key", new String());
+                model.addAttribute("newkey", key);
                 model.addAttribute("osgmsg", null);
                 return "view_board";
             } else {
@@ -208,7 +209,7 @@ public class MainController {
                 String key = encryptionService.generateKey();
                 String encryptMessage = encryptionService.encrypt(message.getText(), encryptionService.stringToKey(key));
                 messageService.postNewMessage(id, user, encryptMessage, key);
-                return "redirect:/board/"+id;
+                return "redirect:/board/"+id+"?key="+key;
             } else {
                 return "redirect:/joinboard?error=Join%20Board%20ID:"+id;
             }
@@ -226,10 +227,10 @@ public class MainController {
     public String decryptMessage(@PathVariable("boardId") Integer boardId, @PathVariable("messageId") Integer messageId, HttpSession session, Model model, String key){
         BoardModel board = boardService.getBoard(boardId);
         List<MessageModel> messages = messageService.getMessages(boardId);
-       String originalMessage = "Invalid Key / Text";
         for (MessageModel message : messages){
             if(message.getId() == messageId){
-                originalMessage = encryptionService.decrypt(message.getText(), encryptionService.stringToKey(key));
+                String originalMessage = encryptionService.decrypt(message.getText(), encryptionService.stringToKey(key));
+                message.setText(originalMessage);
             }
         }
 
@@ -238,27 +239,7 @@ public class MainController {
         model.addAttribute("messages", messages);
         model.addAttribute("board", board);
         model.addAttribute("key", new String());
-        model.addAttribute("osgmsg", originalMessage);
         return "view_board";
-    }
-
-    @GetMapping("/testmain")
-    public String testmain(){
-        String key = encryptionService.generateKey();
-        System.out.println(" Key is " + key);
-
-        String originalMessage = "Hello World";
-        String encryptedMessage = encryptionService.encrypt(originalMessage, encryptionService.stringToKey(key));
-
-
-        System.out.println("Original Message is " + originalMessage);
-        System.out.println("Encrypted Message is " + encryptedMessage);
-
-
-
-        String decryptedMessage = encryptionService.decrypt(encryptedMessage, encryptionService.stringToKey(key));
-        System.out.println("Decrypted Message is " + decryptedMessage);
-        return "login_page";
     }
 
 
@@ -271,5 +252,21 @@ public class MainController {
             model.addAttribute("messages", messageService.getMessageKeys(user.getLogin()));
             return "message_keys";
         }
+    }
+
+    @GetMapping("/board/{id}/users")
+    public String viewBoardUsers(@PathVariable("id") Integer Id, HttpSession session, Model model){
+        if(session.getAttribute("user") == null || session.getAttribute("user").equals("")){
+            return "redirect:/";
+        } else {
+            UserModel user = (UserModel) session.getAttribute("user");
+            if(userService.hasTheBoard(user, Id)){
+                model.addAttribute("users", boardService.getUsers(Id));
+                return "board_users";
+            } else {
+                return "redirect:/joinboard?error=Join%20Board%20ID:"+Id;
+            }
+        }
+
     }
 }

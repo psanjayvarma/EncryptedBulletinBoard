@@ -45,20 +45,25 @@
 <div class="container">
     <hr class="my-4">
     <h1 th:text="${board.getName()+'(ID: '+board.getId()+')'}"></h1>
+    <a th:href="${board.getId()+'/users'}">User List</a>
     <hr class="my-4">
     <div th:if="${osgmsg != null}" class="alert alert-primary" role="alert" th:text="${osgmsg}"></div>
+    <div th:if="${newkey != null}" class="alert alert-primary" role="alert" th:text="${'The new key is '+newkey}"></div>
     <div class="row">
         <div class="accordion" id="accordionExample">
             <div class="accordion-item" th:each="message : ${messages}">
                 <h2 class="accordion-header" th:id="${'heading'+message.getId()}">
-                    <button class="accordion-button collapsed" style="overflow-wrap: anywhere;" type="button" data-bs-toggle="collapse" th:data-bs-target="${'#collapse'+message.getId()}" aria-expanded="true" aria-controls="collapseOne" th:text="${message.getText()}">
+                    <button class="accordion-button collapsed" style="overflow-wrap: anywhere;" type="button" data-bs-toggle="collapse" th:data-bs-target="${'#collapse'+message.getId()}" aria-expanded="true" aria-controls="collapseOne" th:text="${message.getLogin() + ' : ' + message.getText()}">
                     </button>
                 </h2>
                 <div th:id="${'collapse'+message.getId()}" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                     <form class="row" style="padding:10px" method="post" th:action="${'/decrypt/'+board.getId()+'/'+message.getId()}" th:object="${key}">
                         <div class="col-8">
                             <label th:for="${'key'+message.getId()}" class="visually-hidden">Key</label>
-                            <input type="text" class="form-control" th:id="${'key'+message.getId()}" name="key" placeholder="Enter Key">
+                            <input type="text" class="form-control" th:id="${'key'+message.getId()}" name="key" placeholder="Enter Key" required>
+                            <div class="invalid-feedback">
+                                Please enter a key.
+                            </div>
                         </div>
                         <div class="col-4">
                             <button type="submit" class="btn btn-outline-secondary">Decrypt</button>
@@ -76,7 +81,10 @@
             <form class="row" style="padding:10px" method="post" th:action="${'/board/'+board.getId()}" th:object="${message}">
                 <div class="col-8">
                     <label for="postmessage" class="visually-hidden">Key</label>
-                    <input type="text" id ="postmessage" name="text" class="form-control" placeholder="Enter message" aria-label="Enter message" aria-describedby="button-addon2">
+                    <input type="text" id ="postmessage" name="text" class="form-control" placeholder="Enter message" aria-label="Enter message" aria-describedby="button-addon2" required>
+                    <div class="invalid-feedback">
+                        Please enter a message.
+                    </div>
                 </div>
                 <div class="col-4">
                     <button class="btn btn-outline-secondary" id="button-addon2">Post</button>

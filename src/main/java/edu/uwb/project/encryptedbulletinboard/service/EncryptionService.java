@@ -13,11 +13,9 @@ import java.util.Base64;
 public class EncryptionService {
 
     public String generateKey() {
-        SecureRandom secureRandom = new SecureRandom();
-
-        try{
-            KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
-            keyGenerator.init(secureRandom);
+       try{
+            KeyGenerator keyGenerator = KeyGenerator.getInstance("Blowfish");
+            keyGenerator.init(32);
             SecretKey key = keyGenerator.generateKey();
             return keyToString(key);
         } catch (Exception e) {
@@ -29,13 +27,13 @@ public class EncryptionService {
         return Base64.getEncoder().encodeToString(key.getEncoded());
     }
     public SecretKey stringToKey(String key){
-        return new SecretKeySpec(Base64.getDecoder().decode(key), "AES");
+        return new SecretKeySpec(Base64.getDecoder().decode(key), "Blowfish");
     }
 
     public String encrypt(String message, SecretKey key){
 
         try {
-            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+            Cipher cipher = Cipher.getInstance("Blowfish/ECB/PKCS5Padding");
             cipher.init(Cipher.ENCRYPT_MODE, key);
             byte[] encryptedMessage = cipher.doFinal(message.getBytes());
             return Base64.getEncoder().encodeToString(encryptedMessage);
@@ -46,7 +44,7 @@ public class EncryptionService {
 
     public String decrypt(String message, SecretKey key){
         try {
-            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+            Cipher cipher = Cipher.getInstance("Blowfish/ECB/PKCS5Padding");
             cipher.init(Cipher.DECRYPT_MODE, key);
             byte[] decryptedMessage = cipher.doFinal(Base64.getDecoder().decode(message));
             return new String(decryptedMessage);
