@@ -7,10 +7,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +32,9 @@ class UserServiceTest{
 
 
     List<BoardModel> boardModels = new ArrayList<>();
-    List<BoardModel> boards = new ArrayList<>();
+
+    private final List<BoardModel> boards = new ArrayList<>();
+
     UserModel userModel = new UserModel();
 
     @Test
@@ -48,7 +50,6 @@ class UserServiceTest{
         assertEquals("123", userModel.getUsername());
         assertEquals("admin", userModel.getPassword());
         assertEquals("tester@testmail.com", userModel.getName());
-
     }
 
     @Test
@@ -70,22 +71,24 @@ class UserServiceTest{
         BoardModel boardModel = new BoardModel();
         boardModel.setName("testBoard");
         boardModels.add(boardModel);
-        System.out.println("See this  ------" + boardModel);
+        //System.out.println("See this  ------" + boardModels);
         List<BoardModel> currentList = boardModels;
         userModel.setBoards(currentList);
         userRepository.save(userModel);
+        assertEquals(currentList, userModel.getBoards());
     }
 
     @Test
+    @Transactional
     void hasTheBoard() {
         userModel = userRepository.findByUsernameAndPassword("123", "admin").orElse(null);
-        boards = userModel.getBoards();
-        //System.out.println("Board ID is" + boards.get(0).getId());
-        assertEquals("testBoard", boards.get(0).getName());
+        assertEquals("testBoard", boardModels.get(0).getName());
     }
 
     @Test
+    @Transactional
     void exitBoard() {
+        List<BoardModel> boards = new ArrayList<>();
         userModel = userRepository.findByUsernameAndPassword("123", "admin").orElse(null);
         boards = userModel.getBoards();
         //System.out.println("Size     " + boards.size());
@@ -94,7 +97,7 @@ class UserServiceTest{
             //System.out.println("My name is    " + boards.get(i).getName());
             if(boards.get(i).getName().equals("testBoard"))
             {
-                System.out.println("I have been executed" + boards.get(i).getName());
+                System.out.println("I have been executed ---------------" + boards.get(i).getName());
                 boards.remove(i);
             }
         }
@@ -104,4 +107,32 @@ class UserServiceTest{
         userRepository.save(userModel);
         //assertNull(boards.get(0));
     }
+
+    @Test
+    void registerUserThatFails()
+    {
+        userModel.setUsername("123456789");
+        userModel.setPassword("adminadminadminadminadminadminadminadminadminadminadminadminadminadminadminadminadminadminadminadminadminadminadminadminadminadminadminadminadminadminadminadminadminadminadminadminadminadminadminadminadminadminadminadminadminadminadminadminadminadminadminadminadminadminadminadmin");
+        userModel.setName("tester@testmail.com");
+
+        try{
+            userRepository.save(userModel);
+        }
+        catch(Exception e)
+        {
+            System.out.println("Password is too long");
+            fail();
+        }
+    }
+
+    @Test
+    void authenticateThatFails() {
+        //This user does not exist
+        userModel = userRepository.findByUsernameAndPassword("1234567", "admin").orElse(null);
+        if(userModel == null)
+        {
+            fail("NO USER");
+        }
+    }
+
 }

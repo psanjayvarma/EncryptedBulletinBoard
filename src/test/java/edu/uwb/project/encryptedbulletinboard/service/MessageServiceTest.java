@@ -29,6 +29,7 @@ class MessageServiceTest {
     @Autowired
     private MessageRepository messageRepository;
 
+    //The following two tests together make a single test.
     @Test
     void postNewMessage() {
         MessageModel message = new MessageModel();
@@ -52,4 +53,21 @@ class MessageServiceTest {
             }
         }
     }
+
+
+    //A test that fails --- Looking for a message that does not exist
+    @Test
+    void getMessagesThatFails() {
+        //Fetching the message and verifying
+        List<MessageModel> verification = new ArrayList<>();
+        verification = messageRepository.findAllByBoardId(3).orElse(null);
+        for(int i = 0; i < verification.size(); i++)
+        {
+            if(verification.get(i).getText().equals("This is a test message"))
+            {
+                assertEquals("This is a test message and this test shall fail", verification.get(i).getText());
+            }
+        }
+    }
+
 }

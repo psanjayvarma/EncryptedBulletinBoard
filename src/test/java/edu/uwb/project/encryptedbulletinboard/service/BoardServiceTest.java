@@ -34,18 +34,32 @@ class BoardServiceTest {
         boardRepository.save(boardModel);
 
 
-
         //Fetching the board back from the database to verify
         BoardModel verify = new BoardModel();
         verify = boardRepository.findFirstByName("TestingBoardService").orElse(null);
         assertNotNull(verify);
     }
 
+    //Test will fail because the name of the table is too long.
     @Test
-    void getBoard() {
+    void createNewBoardThatExists() {
+        BoardModel boardModel = new BoardModel();
+        boardModel.setName("TestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardService");
+        boardRepository.save(boardModel);
+
+
+        //Fetching the board back from the database to verify
         BoardModel verify = new BoardModel();
-        verify = boardRepository.findFirstById(3).orElse(null);
-        if(verify.getName().equals("TestingBoardService"))
+        verify = boardRepository.findFirstByName("TestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardService").orElse(null);
+        assertNotNull(verify);
+    }
+
+    // This test will fail since board names don't match.
+    @Test
+    void getBoardThatFails() {
+        BoardModel verify = new BoardModel();
+        verify = boardRepository.findFirstById(0).orElse(null);
+        if(verify.getName().equals("TestingBoardServicesNow"))
         {
             assertNotNull(verify);
         }
