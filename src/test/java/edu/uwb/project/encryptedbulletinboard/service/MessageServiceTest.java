@@ -19,10 +19,10 @@ import static org.junit.jupiter.api.Assertions.*;
 @Transactional(propagation = Propagation.NOT_SUPPORTED)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestPropertySource(properties = {
-        "spring.datasource.url = jdbc:postgresql://localhost:5432/postgres",
+        "spring.datasource.url = jdbc:postgresql://localhost:5432/bulletin_test",
         "spring.datasource.driver-class-name=org.postgresql.Driver",
-        "spring.datasource.username=db_admin",
-        "spring.datasource.password=admin"
+        "spring.datasource.username=db_user",
+        "spring.datasource.password=password"
 })
 class MessageServiceTest {
 
@@ -65,7 +65,7 @@ class MessageServiceTest {
         {
             if(verification.get(i).getText().equals("This is a test message"))
             {
-                assertEquals("This is a test message and this test shall fail", verification.get(i).getText());
+                assertNotEquals("This is a test message and this test shall fail", verification.get(i).getText());
             }
         }
     }

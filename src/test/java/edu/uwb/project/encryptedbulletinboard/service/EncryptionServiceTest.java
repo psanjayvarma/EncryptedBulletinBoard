@@ -34,6 +34,6 @@ class EncryptionServiceTest {
         String decryptedMessage = encryptionService.decrypt(encryptedMessage, encryptionService.stringToKey(incorrectKey));
         //Checking both conditions
         assertNotEquals(verification,decryptedMessage);
-        assertEquals(message,decryptedMessage);
+        assertNotEquals(message,decryptedMessage);
     }
 }

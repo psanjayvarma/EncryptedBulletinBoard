@@ -3,7 +3,7 @@ package edu.uwb.project.encryptedbulletinboard.service;
 import edu.uwb.project.encryptedbulletinboard.model.BoardModel;
 import edu.uwb.project.encryptedbulletinboard.model.UserModel;
 import edu.uwb.project.encryptedbulletinboard.repository.UserRepository;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -20,11 +20,12 @@ import static org.junit.jupiter.api.Assertions.*;
 @Transactional(propagation = Propagation.NOT_SUPPORTED)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestPropertySource(properties = {
-        "spring.datasource.url = jdbc:postgresql://localhost:5432/postgres",
+        "spring.datasource.url = jdbc:postgresql://localhost:5432/bulletin_test",
         "spring.datasource.driver-class-name=org.postgresql.Driver",
-        "spring.datasource.username=db_admin",
-        "spring.datasource.password=admin"
+        "spring.datasource.username=db_user",
+        "spring.datasource.password=password"
 })
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class UserServiceTest{
 
     @Autowired
@@ -38,6 +39,7 @@ class UserServiceTest{
     UserModel userModel = new UserModel();
 
     @Test
+    @Order(1)
     void registerUser() {
 
         userModel.setUsername("123");
@@ -53,19 +55,13 @@ class UserServiceTest{
     }
 
     @Test
+    @Order(2)
     void authenticate() {
-        userModel = userRepository.findByUsernameAndPassword("123", "admin").orElse(null);
-        if(userModel == null)
-        {
-            fail("NO USER");
-        }
-        else
-        {
-        }
-        //assertNotNull(userRepository.findByLoginAndPassword("dodo", "admin"));
+        assertNotNull(userRepository.findByUsernameAndPassword("dodo", "admin"));
     }
 
     @Test
+    @Order(3)
     void addNewBoard() {
         userModel = userRepository.findByUsernameAndPassword("123", "admin").orElse(null);
         BoardModel boardModel = new BoardModel();
@@ -75,18 +71,21 @@ class UserServiceTest{
         List<BoardModel> currentList = boardModels;
         userModel.setBoards(currentList);
         userRepository.save(userModel);
-        assertEquals(currentList, userModel.getBoards());
+        assertEquals("testBoard", userModel.getBoards().get(0).getName());
     }
 
     @Test
     @Transactional
+    @Order(4)
     void hasTheBoard() {
         userModel = userRepository.findByUsernameAndPassword("123", "admin").orElse(null);
-        assertEquals("testBoard", boardModels.get(0).getName());
+        System.out.println(userModel);
+        assertEquals("testBoard", userModel.getBoards().get(0).getName());
     }
 
     @Test
     @Transactional
+    @Order(5)
     void exitBoard() {
         List<BoardModel> boards = new ArrayList<>();
         userModel = userRepository.findByUsernameAndPassword("123", "admin").orElse(null);
@@ -109,6 +108,7 @@ class UserServiceTest{
     }
 
     @Test
+    @Order(6)
     void registerUserThatFails()
     {
         userModel.setUsername("123456789");
@@ -126,13 +126,11 @@ class UserServiceTest{
     }
 
     @Test
+    @Order(7)
     void authenticateThatFails() {
         //This user does not exist
         userModel = userRepository.findByUsernameAndPassword("1234567", "admin").orElse(null);
-        if(userModel == null)
-        {
-            fail("NO USER");
-        }
+        assertNull(userModel);
     }
 
 }

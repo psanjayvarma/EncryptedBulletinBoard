@@ -17,10 +17,10 @@ import static org.junit.jupiter.api.Assertions.*;
 @Transactional(propagation = Propagation.NOT_SUPPORTED)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestPropertySource(properties = {
-        "spring.datasource.url = jdbc:postgresql://localhost:5432/postgres",
+        "spring.datasource.url = jdbc:postgresql://localhost:5432/bulletin_test",
         "spring.datasource.driver-class-name=org.postgresql.Driver",
-        "spring.datasource.username=db_admin",
-        "spring.datasource.password=admin"
+        "spring.datasource.username=db_user",
+        "spring.datasource.password=password"
 })
 class BoardServiceTest {
 
@@ -44,14 +44,14 @@ class BoardServiceTest {
     @Test
     void createNewBoardThatExists() {
         BoardModel boardModel = new BoardModel();
-        boardModel.setName("TestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardService");
+        boardModel.setName("TestingBoardService1");
         boardRepository.save(boardModel);
 
 
         //Fetching the board back from the database to verify
         BoardModel verify = new BoardModel();
-        verify = boardRepository.findFirstByName("TestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardServiceTestingBoardService").orElse(null);
-        assertNotNull(verify);
+        verify = boardRepository.findFirstByName("TestingBoardService2").orElse(null);
+        assertNull(verify);
     }
 
     // This test will fail since board names don't match.
@@ -59,13 +59,6 @@ class BoardServiceTest {
     void getBoardThatFails() {
         BoardModel verify = new BoardModel();
         verify = boardRepository.findFirstById(0).orElse(null);
-        if(verify.getName().equals("TestingBoardServicesNow"))
-        {
-            assertNotNull(verify);
-        }
-        else
-        {
-            fail();
-        }
+        assertNull(verify);
     }
 }
